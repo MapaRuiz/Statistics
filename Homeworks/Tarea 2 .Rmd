@@ -1,0 +1,111 @@
+---
+title: "Tarea 2 - Maria Paula Rodriguez Ruiz"
+author: "Maria Paula Rodriguez Ruiz"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+# Enunciado
+*El correo electronico no solicitado y el spam afectan la productividad de los empleados de oficina. Una encuesta de InsightExpress monitoreo a dichos empleados para determinar el tiempo improductivo por dıa dedicado a correo electronico no solicitado y spam (USA Today, 13 de noviembre de 2003). Los datos siguientes presentan una muestra del tiempo en minutos dedicado a esta tarea*
+
+*2 4 8 4 8 1 2 32 12 1 5 7 5 5 3 4 24 19 4 14*
+```{r}
+tiempos <- c(2, 4, 8, 4, 8, 1, 2, 32, 12, 1, 5, 7, 5, 5, 3, 4, 24, 19, 4, 14)
+```
+
+
+# Tabla de distribucion de frecuencias completa
+```{r}
+num_clases <- nclass.Sturges(tiempos)  # Número de clases con la regla de Sturges
+
+histograma <- hist(tiempos, breaks = "Sturges", plot = FALSE)
+breaks <- histograma$breaks  # Obtener los intervalos
+frec_abs <- histograma$counts  # Frecuencia absoluta
+
+tabla_frec <- data.frame(table(Intervalo = cut(tiempos, breaks = breaks, include.lowest = TRUE)))
+
+colnames(tabla_frec)[2] <- "Frecuencia"  # Renombrar columna de frecuencia
+
+# Agregar frecuencia acumulada, relativa y relativa acumulada
+tabla_frec <- transform(tabla_frec,  
+                        Frec_Acumulada = cumsum(Frecuencia),  
+                        Frec_Relativa = round(prop.table(Frecuencia), 2),  
+                        Frec_Relativa_Acumulada = round(cumsum(prop.table(Frecuencia)), 2))
+
+print(tabla_frec)
+
+```
+
+*Analisis: En la tabla nos presentan los 7 intervalos y la frecuencia para cada intervalo, asi como la frecuencia acumulada, frecuencia relativa y la frecuencia relativa acumulada*
+
+
+# Histograma
+```{r}
+p <- hist(tiempos, breaks = "Sturges", right = TRUE, plot = FALSE)
+
+porcentaje1 <- round(prop.table(p$counts) * 100, 1)
+lab1 <- paste(porcentaje1, "%")
+
+hist(tiempos, breaks = "Sturges", col = rainbow(length(p$counts)), 
+     labels = lab1, ylim = c(0, max(p$counts) + 2), 
+     xlab = "Tiempo en minutos", 
+     ylab = "Número de empleados", 
+     main = "Tiempo dedicado al correo no solicitado y spam")
+lines(c(min(p$breaks), p$mids, max(p$breaks)),c(0, p$counts,0), type = "l")
+
+```
+
+*Forma de la distribucion: El histograma es unimodal y es sesgado hacia la derecha, lo que indica que la mayoría de los empleados dedican pocos minutos a revisar spam.*
+
+
+# Poligono de frecuencias
+```{r}
+midpoints <- (breaks[-length(breaks)] + breaks[-1]) / 2
+
+plot(midpoints, tabla_frec$Frecuencia, type = "b", col = "blue", lwd = 2, pch = 16, 
+     xlab = "Minutos", ylab = "Frecuencia", main = "Polígono de Frecuencia")
+
+lines(c(min(breaks), midpoints, max(breaks)), c(0, tabla_frec$Frecuencia, 0), col = "blue", lwd = 2)
+
+```
+
+*Analisis: El polígono de frecuencias refuerza la interpretación del histograma, mostrando una tendencia decreciente en el tiempo dedicado al spam*
+
+
+# Ojiva
+```{r}
+frec_rel_acum <- tabla_frec$Frec_Relativa_Acumulada
+
+plot(breaks[-1], frec_rel_acum, type = "b", col = "red", lwd = 2, pch = 16,
+     xlab = "Tiempo en minutos", ylab = "Frecuencia Relativa Acumulada",
+     main = "Ojiva")
+
+text(breaks[-1], frec_rel_acum, labels = round(frec_rel_acum, 2), pos = 3, cex = 0.8)
+
+puntos_interes <- c(5, 10)
+frec_interes <- sapply(puntos_interes, function(x) {
+  frec_rel_acum[which.min(abs(breaks[-1] - x))]
+})
+
+points(puntos_interes, frec_interes, col = "blue", pch = 19, cex = 1.2)
+text(puntos_interes, frec_interes, labels = paste0(round(frec_interes * 100, 1), "%"),
+     pos = 4, col = "blue", cex = 1)
+
+```
+
+*Analisis: La ojiva muestra que aproximadamente el 75% de los empleados dedican menos de 15 minutos al día al spam.*
+
+
+# ¿Que porcentaje de empleados de oficina paso 5 minutos o menos en correo electronico no solicitado o spam?
+```{r}
+porcentaje_5_menos <- sum(tiempos <= 5) / length(tiempos) * 100
+cat("Porcentaje de empleados que pasaron 5 minutos o menos:", porcentaje_5_menos, "%\n")
+```
+
+
+# ¿Que porcentaje paso mas de 10 minutos al dıa en esta tarea?
+```{r}
+porcentaje_10_mas <- sum(tiempos > 10) / length(tiempos) * 100
+cat("Porcentaje de empleados que pasaron más de 10 minutos:", porcentaje_10_mas, "%\n")
+```
+

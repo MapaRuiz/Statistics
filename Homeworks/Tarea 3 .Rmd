@@ -1,0 +1,62 @@
+---
+title: "Tarea_3"
+author: "Maria Paula Rodriguez Ruiz"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+# Enunciado
+*Utilizamos un conjunto de datos Insurance de R que est´an en el paquete MASS, este conjunto de datos es sobre Seguros: N´umero de reclamaciones de seguros de autom´oviles.Descripci´on: Los datos que se proporcionan en el marco de datos Seguros consisten en el n´umero de asegurados de una compa˜n´ıa de seguros que estuvieron expuestos a riesgos y el n´umero de reclamaciones de seguros de autom´oviles realizadas por dichos asegurados en el tercer trimestre de 1973. Este marco de datos contiene las siguientes columnas: District: Distrito de residencia del asegurado (1 a 4): 4 ciudad m´as importante. Group: Grupo de autom´oviles con niveles < 1 litro, 1–1,5 litros, 1,5–2 litros, > 2 litros. Age: la edad del asegurado en 4 grupos etiquetados < 25, 25–29, 30–35, > 35. Holders: Titulares n´umero de asegurados. Claims: Reclamaciones n´umero de reclamaciones. Referencias: Venables, W. N. and Ripley, B. D. (2002) Modern Applied Statistics with S-PLUS. Fourth Edition. Springer. a) Hallar un resumen de reclamaciones (Claims) respecto a edad (Age). b) Determinar el rango intercuart´ılico para la variable reclamaciones respecto a la variable edad, gr´aficar el diagrama de cajas para la variable reclamaciones respecto a la variable edad y explicar. c) Hallar el percentil 90 de la variable reclamaciones y explicar*
+
+# Cargar datos + Resumen de reclamaciones (Claims) respecto a edad (Age)
+```{r}
+library(MASS)
+data(Insurance)
+
+tapply(Insurance$Claims, Insurance$Age, summary)
+
+```
+## Analisis: 
+*Grupo <25: La mediana de reclamos es 7.5, mientras que la media es 14.31, lo que indica que hay valores extremos altos que elevan la media. El rango es amplio, con un mínimo de 0 y un máximo de 63, lo que sugiere variabilidad en los reclamos.*
+
+*Grupo 25-29: La mediana de 18.5 y la media de 25.25 indican un incremento en los reclamos en comparación con el grupo <25. El máximo valor (84) es mayor que en el grupo anterior, lo que sugiere que algunos individuos en este rango presentan reclamos elevados.*
+
+*Grupo 30-35: Se observa un aumento en la mediana (21) y en la media (28.31), reflejando una tendencia creciente en los reclamos con la edad. El máximo valor (89) es ligeramente mayor que en el grupo 25-29, indicando una variabilidad similar.*
+
+*Grupo >35: Aquí hay un salto significativo, con una mediana de 94 y una media de 129.1. Esto sugiere que las personas mayores de 35 años tienden a presentar más reclamos. El mínimo es 33, significativamente más alto que en otros grupos, lo que indica que incluso los menores valores en este grupo son elevados. El máximo (400) es extremadamente alto, lo que confirma una mayor dispersión en los valores de reclamos para este grupo.*
+
+*Conclusión: Hay una tendencia clara al aumento de los reclamos con la edad. El grupo >35 tiene un comportamiento muy diferente a los demás, con valores mínimos y máximos mucho más altos. En los grupos más jóvenes, la media es mayor que la mediana, lo que indica la presencia de valores extremos que elevan la media. En general, el análisis sugiere que la edad es un factor determinante en la cantidad de reclamos.*
+
+# Rango intercuartılico para la variable reclamaciones respecto a la variable edad + Graficar el diagrama de cajas
+
+```{r}
+
+tapply(Insurance$Claims, Insurance$Age, IQR)
+
+boxplot(Claims ~ Age, data = Insurance, 
+        col = rainbow(4), 
+        main = "Diagrama de cajas de reclamaciones por edad",
+        xlab = "Grupo de Edad", 
+        ylab = "Número de Reclamaciones")
+
+```
+## Analisis:
+*Grupo <25: La caja representa el 50% de los datos, comprendidos entre el primer cuartil (Q1) = 4.00 y el tercer cuartil (Q3) = 19.75. La mediana (Q2) = 7.50 está más cerca de Q1, lo que indica asimetría a la derecha. Bigotes: Límite inferior: Mínimo observado = 0.00. Límite superior: Q3+1.5×IQR=19.75+1.5×(19.75−4.00)=42.375.Como el valor máximo es 63.00, hay valores atípicos. Conclusión: El consumo de reclamaciones en este grupo es muy variable y presenta valores atípicos altos, lo que sugiere que algunos individuos hicieron muchas más reclamaciones que la mayoría.*
+
+*Grupo 25-29: Caja: Los valores están entre Q1 = 9.25 y Q3 = 37.75. Mediana (Q2) = 18.50. Bigotes: Límite inferior: Mínimo observado = 2.00. Límite superior: Q3+1.5×IQR=37.75+1.5×(37.75−9.25)=117.125. Como el valor máximo es 84.00, no hay valores atípicos. Conclusión: El grupo tiene una distribución más uniforme, pero sigue mostrando asimetría a la derecha.*
+
+*Grupo 30-35: Caja: Q1 = 11.50, Q3 = 37.50. Mediana (Q2) = 21.00, más cerca de Q1, indicando asimetría a la derecha. Bigotes: Límite inferior: Mínimo observado = 4.00. Límite superior:  Q3+1.5×IQR=37.50+1.5×(37.50−11.50)=75.25. Como el valor máximo es 89.00, existen valores atípicos. Conclusión: Aunque la mayoría de los datos están dentro del rango esperado, hay algunos individuos con muchas más reclamaciones de lo normal.*
+
+*Grupo >35: Caja: Q1 = 60.50, Q3 = 163.80. Mediana (Q2) = 94.00. Bigotes: Límite inferior: Mínimo observado = 33.00. Límite superior: Q3+1.5×IQR=163.80+1.5×(163.80−60.50)=325.175. Como el valor máximo es 400.00, hay valores atípicos extremos. Conclusión: Este grupo tiene la mayor variabilidad y algunos individuos con un número de reclamaciones excesivamente alto en comparación con el resto.*
+
+*Conclusión General: Los grupos más jóvenes (<25 y 25-29) tienen una distribución más sesgada a la derecha, lo que sugiere que la mayoría de las personas tiene pocas reclamaciones, pero algunas tienen muchas más. En los grupos mayores (30-35 y >35), la variabilidad aumenta, especialmente en >35, donde hay valores atípicos muy altos. El IQR crece con la edad, lo que indica que el número de reclamaciones varía más en los grupos mayores.*
+
+# Hallar el percentil 90 de la variable reclamaciones y explicar
+
+```{r}
+quantile(Insurance$Claims, 0.9)
+```
+## Analisis: 
+*El valor 101.7 que encontramos como el percentil 90 de la variable reclamaciones significa que el 90 % de los datos tienen un número de reclamaciones menor o igual a 101.7, mientras que solo el 10 % de los casos tienen valores mayores a este. El percentil 90 nos indica un umbral alto en la cantidad de reclamaciones, y como el percentil 90 es 101.7, significa que la mayoría de los valores son significativamente menores a este. La mediana (percentil 50) en nuestros datos es mucho menor que 101.7. Esto sugiere que la distribución está sesgada a la derecha, es decir, hay algunos valores muy grandes que elevan los percentiles superiores. El tercer cuartil (Q3 o percentil 75) es menor que 101.7, lo que significa que este percentil 90 está en la cola superior de la distribución. Conclusión: El 90 % de las reclamaciones están por debajo de 101.7, por lo que valores superiores a este pueden considerarse poco frecuentes o extremos. Si quisiéramos analizar casos de alto riesgo o clientes con reclamaciones excepcionalmente altas, nos centraríamos en el 10 % restante de la distribución (valores mayores a 101.7).*
+
+

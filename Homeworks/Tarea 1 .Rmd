@@ -1,0 +1,63 @@
+---
+title: "Tarea 1"
+author: "Maria Paula Rodriguez Ruiz"
+date: "2025-02-02"
+output: word_document
+---
+# Enunciado
+*Los cuatro programas principales de television con mayor audiencia fueron La ley y el orden (LyO), CSI, Sin rastro y Esposas desesperadas (ED) (Nielsen Media Research, 1 de enero de 2007). A continuacion se proporcionan los datos que incluyen los programas preferidos en una muestra de 50 espectadores, se proporciona en el archivo de excel (programas)*
+
+# Ingreso de Datos
+
+```{r}
+library(readxl)
+Pro_Tev <- read_excel("C:/Users/thega/OneDrive/Documentos/5to Semestre/Estadistica/Programas.xlsx")
+attach(Pro_Tev)
+```
+
+# Tabla de frecuencias (dato categorico)
+
+```{r}
+tabla1<-data.frame(table(pr.televi))
+tabla1
+```
+
+```{r}
+tabla2<-transform(tabla1,F_Acumulada=cumsum(Freq),FRelativa=round(prop.table(Freq),2), FRelAcum=round(cumsum(prop.table(Freq)),2))
+tabla2
+```
+*Analisis: El programa con mas frecuencia de vistas es CSI, y el menor es Sin Rastro*
+
+# Grafica de barras
+
+```{r}
+porcentaje<-round(prop.table(table(pr.televi))*100,2)
+porcentaje
+```
+
+```{r}
+lab<-paste(porcentaje,"%")
+lab
+```
+
+```{r}
+y<-barplot(table(pr.televi),main="Programas mas vistos",axes=F, col = rainbow(4))
+text(y,c(2,2),labels = lab)
+```
+
+*Analisis: El mas visto es CSI con un 36% y el menos visto es Sin Rastro con un 18%*
+
+# Grafica circular
+
+```{r}
+lab1<-c("CSI","ED","LyO","Sin Rastro")
+lab2<-paste(lab1,porcentaje,"%")
+lab2
+```
+
+```{r}
+pie(table(pr.televi),main="Programas mas vistos", col = rainbow(4),labels = lab2)
+```
+
+*Analisis: El mas visto es CSI con un 36% y el menos visto es Sin Rastro con un 18%*
+
