@@ -5,6 +5,6 @@
 
 🟧- Subject: Descriptive statistics
 
-👨‍🏫- Teacher: Luz Moya
+👨‍🏫- Teacher: Raul Roldan
 
 🏦- University: Pontificia Universidad Javeriana
