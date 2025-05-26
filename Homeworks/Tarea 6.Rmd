@@ -1,0 +1,48 @@
+---
+title: "Tarea_6"
+author: "Maria Paula Rodriguez Ruiz"
+date: '`r Sys.Date()`'
+output: word_document
+---
+
+# Enunciado
+*El precio medio de las acciones de las empresas que forman el S&P 500 es $30, y la desviaci´on est´andar es $8.20 (BusinessWeek, publicaci´on anual especial, primavera de 2003). Suponga que los precios de las acciones se distribuyen normalmente. a) ¿Cu´al es la probabilidad de que las acciones de una empresa tengan un precio m´ınimo de $40? b) ¿Cu´al es la probabilidad de que el precio de las acciones no supere $20? c) ¿Qu´e tan alto debe ser el precio de las acciones de una firma para situarla en el 10% de las principales empresas?*
+
+# Calcule la probabilidad de que las acciones de una empresa tengan un precio m´ınimo de $40
+```{r}
+# Parámetros de la distribución normal
+mu <- 30         # Media
+sigma <- 8.20    # Desviación estándar
+# P(X >= 40) = 1 - P(X < 40)
+p_a <- 1 - pnorm(40, mean = mu, sd = sigma)
+p_a
+
+```
+## Analisis: 
+*Hay aproximadamente un 11.13% de probabilidad de que una acción tenga un precio mínimo de $40.*
+
+# la probabilidad de que el precio de las acciones no supere $20.
+```{r}
+# Parámetros de la distribución normal
+mu <- 30         # Media
+sigma <- 8.20    # Desviación estándar
+# P(X <= 20)
+p_b <- pnorm(20, mean = mu, sd = sigma)
+p_b
+
+```
+## Analisis: 
+*También hay aproximadamente un 11.13% de probabilidad de que una acción no supere los $20*
+
+# Qu´e tan alto debe ser el precio de las acciones de una firma para situarla en el 10% de las principales empresas
+```{r}
+# Parámetros de la distribución normal
+mu <- 30         # Media
+sigma <- 8.20    # Desviación estándar
+# P(X < c) = 0.90  ->  c = qnorm(0.90, mean = mu, sd = sigma)
+umbral <- qnorm(0.90, mean = mu, sd = sigma)
+umbral
+
+```
+## Analisis: 
+*Las empresas con precios de acciones por encima de $40.51 se encuentran en el 10% superior*

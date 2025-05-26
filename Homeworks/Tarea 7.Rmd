@@ -1,0 +1,48 @@
+---
+title: "Tarea_7"
+author: "Maria Paula Rodriguez Ruiz"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+# Enunciado
+*Joan’s Nursery se especializa en jardines de zonas residenciales diseñados segun el gusto del cliente. La estimacion del precio de un proyecto se basa en el numero de arboles, arbustos, etc., a emplear en el proyecto. Para propositos de estimacion de costos, los gerentes consideran que se requieren dos horas de trabajo para plantar un arbol mediano. A continuacion se presentan los tiempos (en horas) realmente requeridos en una muestra de 10 arboles plantados durante el mes pasado. 1.7, 1.5 ,2.6, 2.2 ,2.4, 2.3, 2.6, 3.0, 1.4, 2.3 Con un nivel de significancia α = 0.05, realice una prueba para ver si el tiempo necesario promedio para plantar los  arboles difiere de 2 horas. a) Establezca las hip´otesis nula y alternativa. b) Calcule la media muestral. c) Calcule la desviaci´on est´andar muestral. d) ¿Cu´al es el valor-p? e) ¿Cu´al es su conclusi´on?*
+
+# Establezca las hip´otesis nula y alternativa
+```{r}
+# a) Hipótesis
+# H0: mu = 2
+# H1: mu != 2
+```
+## Analisis: 
+*H₀: μ = 2 (el tiempo medio para plantar un árbol es 2 horas) H₁: μ ≠ 2 (el tiempo medio difiere de 2 horas) Es una prueba bilateral (dos colas), con nivel de significancia α = 0.05.*
+
+# Calcule la media y la desviaci´on est´andar muestral.
+```{r}
+# Datos
+tiempos <- c(1.7, 1.5, 2.6, 2.2, 2.4, 2.3, 2.6, 3.0, 1.4, 2.3)
+
+media_muestral <- mean(tiempos)
+sd_muestral    <- sd(tiempos)
+
+media_muestral
+sd_muestral
+```
+## Analisis: 
+*Media = 2.20 horas Desviación estándar = 0.5164 horas*
+
+# ¿Cu´al es el valor-p? y ¿Cu´al es su conclusi´on?
+```{r}
+# Datos
+tiempos <- c(1.7, 1.5, 2.6, 2.2, 2.4, 2.3, 2.6, 3.0, 1.4, 2.3)
+
+# d) Prueba t de Student (dos colas)
+prueba <- t.test(tiempos, mu = 2, alternative = "two.sided", conf.level = 0.95)
+
+# Extraer valor‑p
+p_valor <- prueba$p.value
+
+p_valor
+```
+## Analisis: 
+*p‑valor ≈ 0.2518. Decisión: Como 0.2518 > 0.05, no rechazamos H₀ pues no hay evidencia suficiente para afirmar que el tiempo medio difiera de 2 horas.*

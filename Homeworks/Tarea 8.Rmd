@@ -1,0 +1,57 @@
+---
+title: "Tarea_8"
+author: "Maria Paula Rodriguez Ruiz"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+# Enunciado
+*El administrador de una empresa de taxis est´a tratando de decidir si el uso de neum´aticos radiales en lugar de neum´aticos regulares cinturados mejora el rendimiento de combustible. Se equipan 12 autos con neum´aticos radiales y se conducen en un recorrido de prueba preestablecido. Sin cambiar a los conductores, los mismos autos se equipan con neum´aticos regulares cinturados y se conducen nuevamente en el recorrido de prueba. Se registraron los siguientes datos sobre el consumo de gasolina, en kil´ometros por litro: Llantas radiales Llantas cinturadas (Tabla) ¿Podemos concluir que los autos equipados con neum´aticos radiales ahorran m´as combustible que aquellos equipados con neum´aticos cinturados? a) ¿Las dos muestras de datos son dependientes o independientes? b) ¿Cu´ales son las hip´otesis nula y alternativa apropiadas? c) Realiza la prueba al nivel de significancia de 0.05. ¿Cu´al es el valor p? d) ¿Cu´al es su conclusi´on? e) ¿Cu´al es el valor de la media de las diferencias?*
+
+# ¿Las dos muestras de datos son dependientes o independientes?
+```{r}
+#Son dependientes porque cada auto fue probado dos veces, una vez con llantas radiales y otra vez con llantas cinturadas.
+#Es decir, cada auto tiene dos mediciones que están relacionadas:
+#Mismo auto, mismo conductor, mismo recorrido, solo cambia el tipo de llanta.
+
+#Esto forma pares naturales de datos: el resultado con radial y el resultado con cinturada del mismo auto.
+#Por eso:
+#No son dos muestras independientes (no es que 12 autos usaron radiales y otros 12 distintos usaron cinturadas).
+#Sí son muestras dependientes (cada auto sirve como su propio control).
+```
+## Analisis: 
+*Son muestras dependientes*
+
+# Establezca las hip´otesis nula y alternativa
+```{r}
+# Hipótesis (prueba de cola derecha, H1: radiales > cinturados)
+# H0: mu_d = 0
+# H1: mu_d > 0
+# donde d = radiales - cinturados
+```
+## Analisis: 
+*H₀:m _dμ = 0 (no hay diferencia entre las llantas) H₁:m_ dμ > 0 radiales supera a los cinturados) Es una prueba de cola derecha, con nivel de significancia α = 0.05.*
+
+# Realiza la prueba al nivel de significancia de 0.05, ¿Cu´al es el valor p?, ¿Cu´al es su conclusi´on? Y ¿Cu´al es el valor de la media de las diferencias?
+```{r}
+# Datos
+radiales   <- c(4.2, 4.7, 6.6, 7.0, 6.7, 4.5, 5.7, 6.0, 7.4, 4.9, 6.1, 5.2)
+cinturados <- c(4.1, 4.9, 6.2, 6.9, 6.8, 4.4, 5.7, 5.8, 6.9, 4.7, 6.0, 4.9)
+
+# c) Prueba t pareada (cola derecha)
+resultado <- t.test(radiales, cinturados,
+                    paired      = TRUE,
+                    alternative = "greater",
+                    mu          = 0,
+                    conf.level  = 0.95)
+
+# Extraer valor-p y media de las diferencias
+p_valor    <- resultado$p.value
+media_diff <- mean(radiales - cinturados)
+
+# Mostrar resultados
+p_valor
+media_diff
+```
+## Analisis: 
+*Media de las diferencias: d = mean(radiales–cinturados) ≈ 0.141 km/l, a favor de los radiales. Valor-p: p_valor ≈ 0.0151 (menor que α = 0.05). Decisión: Dado que 0.0151 < 0.05, rechazamos H₀. Por lo que hay evidencia estadística suficiente (al 5 % de significación) de que los neumáticos radiales proporcionan un rendimiento de combustible mayor que los cinturados en este recorrido de prueba.*

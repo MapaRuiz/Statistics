@@ -1,0 +1,38 @@
+---
+title: "Tarea_5"
+author: "Maria Paula Rodriguez Ruiz"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+# Enunciado
+*Los pasajeros de las aerol´ıneas llegan en forma aleatoria e independiente al mostrador de revisi´on de pasajeros. La tasa media de llegada es 10 pasajeros por minuto. a) Calcule la probabilidad de que lleguen tres o menos pasajeros en un lapso de un minuto. b) De que no llegue ning´un pasajero en un lapso de 15 segundos. c) De que llegue por lo menos un pasajero en un lapso de 15 segundos*
+
+# Calcule la probabilidad de que lleguen tres o menos pasajeros en un lapso de un minuto
+```{r}
+lambda_1min <- 10  # Tasa de llegada en 1 minuto
+p_3_menos <- ppois(3, lambda = lambda_1min)
+p_3_menos
+
+```
+## Analisis: 
+*La probabilidad de que lleguen 3 o menos pasajeros en 1 minuto es 1.03%, lo que indica que es muy poco probable.*
+
+# De que no llegue ning´un pasajero en un lapso de 15 segundos.
+```{r}
+lambda_15sec <- 2.5  # Tasa en 15 segundos
+p_0_15sec <- dpois(0, lambda = lambda_15sec)
+p_0_15sec
+
+```
+## Analisis: 
+*La probabilidad de que no llegue ningún pasajero en 15 segundos es 8.21%, lo que indica que es muy poco probable.*
+
+# De que llegue por lo menos un pasajero en un lapso de 15 segundos
+```{r}
+p_1_mas_15sec <- 1 - p_0_15sec
+p_1_mas_15sec
+
+```
+## Analisis: 
+*La probabilidad de que llegue al menos un pasajero en 15 segundos es 91.79%, lo que indica que es altamente probable, lo cual es consistente con el analisis de la pregunta anterior.*
