@@ -1,0 +1,165 @@
+---
+title: "Parcial2"
+author: "Maria Paula Rodriguez Ruiz"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r}
+# Parámetros
+mu    <- 106
+sigma <- 8
+
+# Calcular el percentil 25 (cuartil inferior)
+p25 <- qnorm(0.25, mean = mu, sd = sigma)
+
+# Mostrar resultado
+p25
+
+```
+```{r}
+# Parámetros de la población y tamaño muestral
+mu    <- 1.8
+sigma <- 0.2
+n     <- 4
+
+# Desviación estándar de la media muestral
+sigma_xbar <- sigma / sqrt(n)
+
+# Calcular P(Xbar < 1.6)
+p <- pnorm(1.6, mean = mu, sd = sigma_xbar)
+p  # Aproximadamente 0.02275
+
+```
+
+```{r}
+# Datos
+p0 <- 2/3        # Proporción histórica de supervivencia
+n  <- 200
+x  <- 164
+p_hat <- x / n
+
+# Estadístico de prueba z
+z <- (p_hat - p0) / sqrt(p0 * (1 - p0) / n)
+z
+
+```
+```{r}
+# Datos
+p0   <- 0.77        # Proporción histórica
+n    <- 27
+x    <- 15
+phat <- x / n       # Proporción muestral
+
+# Estadístico z para prueba de proporción (cola izquierda)
+z <- (phat - p0) / sqrt(p0 * (1 - p0) / n)
+
+# p-valor (cola izquierda)
+p_valor <- pnorm(z)
+
+# Resultado
+z
+p_valor
+
+```
+
+```{r}
+# La tasa anual es λ_anual = 12 muertes/año
+# Para un mes (1/12 de año), λ_mes = 12*(1/12) = 1
+lambda_mes <- 12 / 12
+
+# Probabilidad de 0,1,2,3 o 4 muertes en el mes
+p_cuatro_o_menos <- ppois(4, lambda = lambda_mes)
+
+# Mostrar resultado
+p_cuatro_o_menos
+
+```
+
+```{r}
+# Tasa por hora
+lambda_hora <- 54
+
+# Convertir a intervalo de 5 minutos (1/12 de hora)
+lambda_5min <- lambda_hora * (5/60)  # = 4.5
+
+# Probabilidad de exactamente 4 llamadas
+p4 <- dpois(4, lambda = 4.5)
+
+# Mostrar resultado
+p4
+
+```
+
+```{r}
+# Datos
+rendimientos <- c(3.35, 3.92, 4.26, 3.36, 3.72, 4.19, 3.42, 4.38, 4.50)
+n            <- length(rendimientos)
+
+# Estadísticas muestrales
+media     <- mean(rendimientos)    # ≈ 3.900
+sd_muestral <- sd(rendimientos)    # desv. estándar de la muestra
+
+# Error estándar
+se <- sd_muestral / sqrt(n)
+
+# Valor t crítico para 90% y gl = n-1 = 8
+t_crit <- qt(0.95, df = n - 1)
+
+# Intervalo de confianza
+lower <- media - t_crit * se
+upper <- media + t_crit * se
+
+c(lower, upper)
+
+```
+
+```{r}
+# Proporción muestral
+p_hat <- 0.65
+n     <- 5000
+
+# Error estándar
+se <- sqrt(p_hat * (1 - p_hat) / n)
+
+# Valor crítico z para 95%
+z <- qnorm(0.975)
+
+# Intervalo de confianza
+li <- p_hat - z * se
+ls <- p_hat + z * se
+
+# Convertir a porcentaje
+li * 100
+ls * 100
+
+```
+
+```{r}
+# Datos
+fertrate <- c(7.1, 5.0, 6.8, 6.4, 7.4, 6.4, 6.7, 5.8, 6.6,
+              6.7, 6.2, 8.5, 6.6, 5.9, 6.2, 7.3, 5.7)
+contra    <- c( 9,33, 9, 2, 3,13,27, 7, 7,
+               5, 6,10,11, 6,34, 5,43)
+
+# Ajuste de la regresión lineal
+modelo <- lm(fertrate ~ contra)
+
+# Coeficientes
+coef(modelo)
+
+```
+
+```{r}
+# Datos
+x <- c(29, 42, 45, 45, 50, 50, 53, 54, 55, 60, 65)
+y <- c(112,98, 58, 68, 28, 46, 42, 50, 18, 51, 49)
+
+# Ajuste de regresión lineal
+modelo <- lm(y ~ x)
+
+# Intervalos de confianza al 95%
+confint(modelo, level = 0.95)
+
+```
+
